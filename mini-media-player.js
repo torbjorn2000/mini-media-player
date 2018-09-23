@@ -100,7 +100,7 @@ class MiniMediaPlayer extends LitElement {
               <div id='playername' has-info=${this._hasMediaInfo(entity)}>
                 ${name}
               </div>
-              <div id='mediainfo'>
+              <div id='mediainfo' state=${entity.state}>
                 <span id='mediatitle'>${this._getAttribute(entity, 'media_title')}</span>
                 <span id='mediaartist'>${this._getAttribute(entity, 'media_artist')}</span>
               </div>
@@ -178,7 +178,9 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderVolControls(entity) {
-    if (this.config.volume_stateless) {
+    if (entity.state == 'paused') {
+      return html`<div/>`;
+    } else if (this.config.volume_stateless) {
       return this._renderVolButtons(entity);
     } else {
       return this._renderVolSlider(entity);
@@ -418,6 +420,9 @@ class MiniMediaPlayer extends LitElement {
         }
         #mediainfo {
           color: var(--secondary-text-color);
+        }
+        #mediainfo[state='paused'] {
+          color: var(--disabled-text-color);
         }
         ha-card[artwork='cover'] #mediainfo {
           color: var(--accent-color);
